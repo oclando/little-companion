@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>原版阅读 · 小伙伴桌宠</title>
+  <link rel="stylesheet" href="reader.css">
+</head>
+<body>
+  <header class="titlebar">
+    <div class="titlebar-brand"><span class="brand-mark">Aa</span><div><b>ORIGINAL READER</b><small>小伙伴双语阅读</small></div></div>
+    <div class="titlebar-center" id="window-book-title">原版阅读</div>
+    <div class="window-controls">
+      <button id="window-minimize" type="button" aria-label="最小化" title="最小化">—</button>
+      <button id="window-maximize" type="button" aria-label="最大化" title="最大化"><span>□</span></button>
+      <button class="close" id="window-close" type="button" aria-label="关闭阅读器" title="关闭">×</button>
+    </div>
+  </header>
+
+  <main class="reader-app">
+    <aside class="chapter-sidebar">
+      <div class="book-identity">
+        <p>MY READING</p>
+        <h1 id="book-title">正在载入…</h1>
+        <span id="book-meta"></span>
+      </div>
+      <div class="reading-progress"><div><span>阅读进度</span><b id="reading-progress-value">0%</b></div><i><em id="reading-progress-bar"></em></i></div>
+      <nav id="chapter-list" class="chapter-list" aria-label="章节目录"></nav>
+      <div class="chapter-sidebar-footer"><button class="back-to-app" id="reader-back" type="button">← 返回英语学习</button><button class="source-button" id="open-source" type="button">↗ 打开原文件</button></div>
+    </aside>
+
+    <section class="reading-workspace">
+      <div class="reader-toolbar">
+        <div><span class="eyebrow">BILINGUAL DESK</span><strong id="chapter-title">章节</strong></div>
+        <div class="toolbar-actions">
+          <span class="scroll-hint">滚轮滚动 · 中键拖动</span>
+          <span class="translation-state" id="translation-state">正在读取翻译设置</span>
+          <button id="auto-translate" type="button" aria-pressed="true">自动翻译：开</button>
+          <button id="translate-chapter" type="button">翻译本章</button>
+          <button id="toggle-chinese" type="button" aria-pressed="true">只看英文</button>
+          <span class="font-controls"><button id="font-down" type="button">A−</button><button id="font-up" type="button">A＋</button></span>
+        </div>
+      </div>
+      <div class="column-headings"><span>ORIGINAL / 英文原文</span><span>TRANSLATION / 中文翻译</span></div>
+      <div class="paragraph-scroll" id="paragraph-scroll">
+        <div class="reader-loading">正在整理正文…</div>
+      </div>
+    </section>
+
+    <aside class="study-inspector">
+      <section class="inspector-section word-card">
+        <div class="inspector-heading"><div><p>WORD NOTE</p><h2>鼠标停留或点击单词</h2></div><span id="word-source-badge">本地词库</span></div>
+        <div class="word-display" id="word-display">word</div>
+        <div class="word-meaning" id="word-meaning">对应的中文释义会出现在这里。</div>
+        <div class="word-context" id="word-context"></div>
+        <div class="word-actions">
+          <button id="speak-word" type="button" disabled>▶ 发音</button>
+          <button id="translate-word" type="button" disabled>译这个词</button>
+          <button class="star-button" id="save-word" type="button" disabled>☆ 加入词库</button>
+        </div>
+        <label class="word-list-label">保存到<select id="target-word-list"></select></label>
+      </section>
+
+      <section class="inspector-section paragraph-note">
+        <div class="inspector-heading"><div><p>PARAGRAPH NOTE</p><h2>当前段落译文</h2></div><span id="paragraph-number">未选择</span></div>
+        <textarea id="paragraph-translation-editor" placeholder="点击左侧段落后，可自动翻译，也可以自己输入或粘贴更准确的译文。"></textarea>
+        <div class="paragraph-actions">
+          <button id="translate-paragraph" type="button" disabled>翻译本段</button>
+          <button id="copy-translation-prompt" type="button" disabled>复制 AI 指令</button>
+          <button class="primary" id="save-paragraph-translation" type="button" disabled>保存译文</button>
+        </div>
+      </section>
+
+      <section class="local-translation-note">
+        <b>翻译会留在这本书里</b>
+        <p>只把当前需要的单词或段落发送到你配置的百度/有道翻译；已完成译文保存在本机。自动翻译只预载屏幕附近内容，不会一次上传整本书。</p>
+        <button id="enable-translator" type="button">尝试启用本机模型（可选）</button>
+      </section>
+    </aside>
+  </main>
+
+  <div class="toast" id="toast" role="status"></div>
+  <script src="reader.js"></script>
+</body>
+</html>

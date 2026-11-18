@@ -1,0 +1,794 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="panel.css">
+  <link rel="stylesheet" href="vocab-enhancements.css">
+  <link rel="stylesheet" href="ai-workspace.css">
+  <link rel="stylesheet" href="word-adventure.css">
+  <title>小伙伴桌宠 · 学习助手</title>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <img src="../assets/app-icon.png" alt="">
+        <div><strong>小伙伴</strong><span>学习助手</span></div>
+        <button class="sidebar-toggle" id="sidebar-toggle" type="button" title="收起侧栏" aria-label="收起侧栏" aria-expanded="true">‹</button>
+      </div>
+      <nav id="main-nav" aria-label="主导航">
+        <button class="nav-item active" data-page="dashboard" title="今日助手"><span>⌂</span><b>今日助手</b></button>
+        <button class="nav-item" data-page="characters" title="角色剧场"><span>♙</span><b>角色剧场</b></button>
+        <button class="nav-item" data-page="ai" title="聊天与冒险"><span>✧</span><b>聊天与冒险</b></button>
+        <button class="nav-item" data-page="schedule" title="课程表"><span>▦</span><b>课程表</b></button>
+        <button class="nav-item" data-page="todos" title="待办事项"><span>✓</span><b>待办事项</b></button>
+        <button class="nav-item" data-page="vocabulary" title="英语学习"><span>Aa</span><b>英语学习</b></button>
+        <button class="nav-item" data-page="pomodoro" title="番茄钟"><span>◷</span><b>番茄钟</b></button>
+        <button class="nav-item" data-page="calendar" title="日历足迹"><span>▤</span><b>日历足迹</b></button>
+        <button class="nav-item" data-page="civilService" title="考公学习"><span>册</span><b>考公学习</b></button>
+        <button class="nav-item" data-page="finalExam" title="期末复习"><span>考</span><b>期末复习</b></button>
+        <button class="nav-item" data-page="settings" title="设置"><span>⚙</span><b>设置</b></button>
+      </nav>
+      <div class="sidebar-note">
+        <span class="status-dot"></span>
+        <div><strong>提醒助手在线</strong><small>课程与待办会准时通知</small></div>
+      </div>
+      <div class="sidebar-actions">
+        <button id="hide-main" title="隐藏到系统托盘">隐藏窗口</button>
+        <button id="quit-app" title="完全关闭桌宠和提醒">退出软件</button>
+      </div>
+    </aside>
+
+    <main class="workspace">
+      <header class="topbar">
+        <div><p id="page-eyebrow">TODAY / 今日</p><h1 id="page-title">今天，稳稳地向前</h1></div>
+        <div class="topbar-meta"><span id="today-date"></span><button class="icon-button" id="top-add" title="添加待办">＋</button></div>
+      </header>
+
+      <div class="page-scroll">
+        <section class="page active" id="page-dashboard">
+          <div class="dashboard-grid">
+            <article class="assistant-card">
+              <div class="assistant-copy">
+                <p class="section-label">今日提示</p>
+                <h2 id="greeting">下午好</h2>
+                <p id="assistant-message">先把今天最重要的一件事放到桌面上。</p>
+                <div class="assistant-actions"><button class="button primary" data-go="pomodoro">开始专注</button><button class="button ghost" data-go="vocabulary">滚动复习</button></div>
+              </div>
+              <img id="dashboard-pet" alt="你的桌宠角色">
+            </article>
+
+            <article class="focus-mini" data-go="pomodoro">
+              <p class="section-label">FOCUS / 专注</p>
+              <div class="mini-time" id="mini-time">25:00</div>
+              <p id="mini-mode">准备开始一轮专注</p>
+              <div class="mini-track"><span id="mini-progress"></span></div>
+            </article>
+          </div>
+
+          <div class="content-columns">
+            <article class="surface timeline-card">
+              <div class="section-head"><div><p class="section-label">TODAY'S ROUTE</p><h2>今天的学习路线</h2></div><button class="text-button" data-go="schedule">查看课程表 →</button></div>
+              <div id="today-timeline" class="timeline"></div>
+            </article>
+            <aside class="surface task-brief">
+              <div class="section-head"><div><p class="section-label">CHECKLIST</p><h2>今天要记得</h2></div><button class="text-button" data-go="todos">全部</button></div>
+              <div id="dashboard-todos" class="brief-list"></div>
+              <button class="add-line" id="dashboard-add-todo">＋ 添加一项</button>
+            </aside>
+          </div>
+        </section>
+
+        <section class="page" id="page-characters">
+          <article class="character-stage-hero">
+            <div class="stage-copy">
+              <p class="section-label">CHARACTER STAGE / 角色剧场</p>
+              <h2>决定今天由谁陪你</h2>
+              <p>每位角色都有自己的形象、性格说明和独立记忆。可以单独轮流上场，也可以选择多人同时出现。</p>
+              <div class="stage-controls">
+                <div class="stage-mode-switch" id="stage-mode-switch">
+                  <button data-stage-mode="single">单人轮换</button>
+                  <button data-stage-mode="multi">多人同台</button>
+                </div>
+                <button class="button stage-next" id="next-character">切换下一位 ⇄</button>
+              </div>
+            </div>
+            <div class="stage-preview" id="stage-preview" aria-label="当前上场角色"></div>
+          </article>
+
+          <div class="character-toolbar">
+            <div><p class="section-label">CAST</p><h2>角色名单</h2><span id="character-count">1 位角色</span></div>
+            <button class="button primary" id="add-character">＋ 添加角色</button>
+          </div>
+          <div id="character-grid" class="character-grid"></div>
+
+          <article class="surface character-guide">
+            <div><p class="section-label">ASSET GUIDE</p><h2>每位角色都有独立的三引擎素材目录</h2><small>静态素材现在可直接显示；Live2D 与 Spine 先按规范放入，随后接入对应运行时。</small></div>
+            <div class="guide-steps"><span><b>STATIC</b>PNG、GIF、逐帧图</span><span><b>LIVE2D</b>model3.json 完整导出包</span><span><b>SPINE</b>JSON/SKEL、ATLAS、纹理</span></div>
+          </article>
+        </section>
+
+        <section class="page" id="page-ai">
+          <div id="ai-workspace" class="ai-workspace">
+            <div class="ai-topline"><div class="ai-tabs" role="tablist" aria-label="聊天与冒险"><button data-ai-tab="story" class="active">聊天与剧情</button><button data-ai-tab="cards">角色卡</button><button data-ai-tab="api">API 设置</button></div><span id="ai-status" role="status">读取本机存档…</span></div>
+            <p id="ai-error" class="ai-error" role="alert" hidden></p>
+            <div data-ai-panel="story" class="ai-story-layout">
+              <aside class="ai-saves"><div class="ai-section-title"><strong>我的存档</strong><button class="text-button" id="ai-new-session">＋ 新建</button></div><div id="ai-session-list"></div><button class="text-button" id="ai-import-save">导入剧情与记忆</button></aside>
+              <section class="ai-story"><header class="ai-story-head"><div><span id="ai-mode-label" class="section-label">陪伴 / 冒险</span><h2 id="ai-story-title">从一次相遇开始</h2></div><div class="ai-inline"><button class="button ghost" id="ai-open-chat">独立聊天 ↗</button><button class="text-button" id="ai-export-save">导出</button><button class="text-button" id="ai-delete-save">删除存档</button></div></header>
+                <div id="ai-messages" class="ai-messages" aria-label="聊天记录"></div>
+                <form id="ai-compose" class="ai-compose"><div class="ai-inline"><label><input id="ai-group-mode" type="checkbox" checked>多人轮流回应</label><label>回复角色 <select id="ai-speaker" aria-label="回复角色"></select></label><button class="text-button" id="ai-share-study" type="button">陪我背单词</button><button class="text-button" type="button" data-go="vocabulary">打开单词复习 ↗</button></div><textarea id="ai-input" rows="3" maxlength="24000" placeholder="说句话，或写下你在故事中的行动……" aria-label="消息"></textarea><div class="ai-compose-bottom"><small>Enter 发送 · Shift+Enter 换行</small><button class="button ghost" id="ai-continue" type="button">继续</button><button class="button ghost" id="ai-stop" type="button" hidden>停止生成</button><button class="button primary" id="ai-send">发送</button></div></form>
+              </section>
+              <aside class="ai-inspector"><div class="ai-section-title"><strong>这段旅程</strong><span id="ai-world-name"></span></div><div class="ai-inspector-tabs"><button data-ai-inspect="memories" class="active">私人记忆</button><button data-ai-inspect="world">世界与地图</button></div>
+                <div id="ai-memory-panel"><p class="ai-hint">仅供当前存档中选定的角色使用。选中聊天的“记住”，或手动记录。</p><div id="ai-memories"></div><textarea id="ai-memory-text" rows="3" placeholder="值得记住的事……" aria-label="新记忆"></textarea><div class="ai-inline"><button class="text-button" id="ai-add-memory">保存记忆</button><button class="text-button" id="ai-clear-memories">清空该角色记忆</button></div></div>
+                <div id="ai-world-panel" hidden><div id="ai-world-summary"></div><div id="ai-map" aria-label="地点连接图"></div><button class="button ghost" id="ai-edit-world">编辑世界</button><p class="ai-hint">地点与连接跟随存档和分支。随机世界生成将在后续接入。</p></div>
+                <details class="ai-reminder"><summary>角色学习督促</summary><p class="ai-hint">启用后向所选 API 发送单词统计，每次到点生成一条提醒；遵守设置中的安静时间。仅支持日常聊天存档。</p><label><input id="ai-reminder-enabled" type="checkbox">启用当前存档的角色督促</label><label>间隔（分钟）<input id="ai-reminder-minutes" type="number" min="15" max="1440" value="60"></label><button class="text-button" id="ai-save-reminder">保存督促设置</button></details>
+              </aside>
+            </div>
+            <div data-ai-panel="cards" hidden><div class="ai-library-head"><div><h2>可以走进不同世界的角色</h2><p class="ai-hint">支持酒馆 JSON / PNG 角色卡。编辑卡片影响新存档，既有存档保留独立的人设快照。</p></div><div class="ai-inline"><button class="button ghost" id="ai-create-card">创建角色卡</button><button class="button primary" id="ai-import-card">导入角色卡</button></div></div><div id="ai-card-list" class="ai-card-list"></div></div>
+            <div data-ai-panel="api" hidden><form id="ai-api-form" class="ai-api-form surface"><p class="section-label">MODEL / 模型连接</p><h2>让角色拥有自己的声音</h2><p class="ai-hint">连接支持 Chat Completions 的 API。密钥由 Windows 加密保存；聊天、人设和被检索的记忆仅在发起请求时发送给你选择的服务。</p><label>API 基础地址<input id="ai-base-url" type="url" required placeholder="https://api.deepseek.com"></label><label>模型名称<input id="ai-model" required placeholder="deepseek-flash"></label><label>API 密钥<input id="ai-api-key" type="password" autocomplete="new-password" placeholder="留空保留已有密钥"></label><span id="ai-key-status" class="ai-hint"></span><label><input id="ai-stream-enabled" type="checkbox" checked>流式输出（中转不兼容时关闭）</label><label>角色如何称呼你<input id="ai-user-name" maxlength="50" value="你"></label><div class="ai-api-numbers"><label>温度<input id="ai-temperature" type="number" min="0" max="2" step="0.1" value="0.8"></label><label>回复 token 上限<input id="ai-max-tokens" type="number" min="64" max="16000" value="1400"></label><label>上下文字符预算<input id="ai-context-chars" type="number" min="8000" max="100000" step="1000" value="24000"></label></div><p class="ai-hint">字符预算用于控制请求长度；不同模型的实际 token 数不同。暂不执行角色卡附带的脚本或正则。</p><div class="ai-inline"><button class="button primary">保存设置</button><button class="button ghost" id="ai-test-api" type="button">测试连接</button><button class="text-button" id="ai-clear-key" type="button">删除密钥</button></div></form></div>
+          </div>
+        </section>
+
+        <section class="page" id="page-schedule">
+          <div class="page-intro"><div><p>按周安排课程，开课前自动提醒。</p></div><button class="button primary" id="add-course">＋ 添加课程</button></div>
+          <article class="surface schedule-surface">
+            <div class="week-heading"><button class="round-button" id="week-prev">‹</button><div><strong id="week-range">本周</strong><span id="week-caption">课程总览</span></div><button class="round-button" id="week-next">›</button><button class="text-button" id="week-today">回到本周</button></div>
+            <div class="week-grid" id="week-grid"></div>
+          </article>
+        </section>
+
+        <section class="page" id="page-todos">
+          <article class="surface quick-add-card">
+            <form id="todo-form">
+              <input id="todo-title" maxlength="100" required placeholder="写下下一件要完成的事……" aria-label="待办名称">
+              <input id="todo-due" type="datetime-local" aria-label="截止时间">
+              <select id="todo-priority" aria-label="优先级"><option value="medium">普通</option><option value="high">重要</option><option value="low">稍后</option></select>
+              <button class="button primary">加入清单</button>
+            </form>
+          </article>
+          <div class="todo-toolbar"><div class="segmented" id="todo-filters"><button class="active" data-filter="all">全部</button><button data-filter="today">今天</button><button data-filter="pending">未完成</button><button data-filter="done">已完成</button></div><span id="todo-count">0 项未完成</span></div>
+          <article class="surface todo-surface"><div id="todo-list" class="todo-list"></div></article>
+        </section>
+
+        <section class="page" id="page-vocabulary">
+          <div class="english-tabs" id="english-tabs" role="tablist" aria-label="英语学习功能">
+            <button class="active" data-english-tab="words">单词与复习 <span id="english-word-count">0</span></button>
+            <button data-english-tab="books">原版书架 <span id="english-book-count">0</span></button>
+            <button data-english-tab="articles">学习资料 <span id="english-article-count">0</span></button>
+            <button data-english-tab="sentences">句子卡片 <span id="english-sentence-count">0</span></button>
+            <button data-english-tab="ai">AI 学习包</button>
+          </div>
+
+          <section class="english-panel active" data-english-panel="words">
+          <article class="surface word-list-bar">
+            <div><p class="section-label">CUSTOM LIBRARIES / 自定义词库</p><h2>一个单词可以同时放进多个词库</h2></div>
+            <div class="word-list-actions"><select id="word-list-filter" aria-label="选择词库"></select><button class="button ghost" id="new-word-list">＋ 新建词库</button><button class="button ghost" id="manage-word-list">管理</button><button class="button ghost" id="add-word-manual">＋ 手动加词</button><button class="button primary" id="import-to-word-list">导入单词或试卷</button></div>
+          </article>
+          <div class="vocab-overview">
+            <article class="memory-hero">
+              <div>
+                <p class="section-label">MEMORY ROLL / 记忆卷轴</p>
+                <h2>今天要让哪些词留下来？</h2>
+                <p>看单词、回想释义、翻面确认，再告诉系统你记得多牢。下次出现时间会自动调整。</p>
+              </div>
+              <div class="memory-orbit" aria-label="单词复习统计">
+                <strong id="vocab-due-count">0</strong>
+                <span>今日待复习</span>
+              </div>
+            </article>
+            <div class="vocab-stat-strip">
+              <div><span>词库</span><strong id="vocab-total">0</strong><small>个单词</small></div>
+              <div><span>今天</span><strong id="vocab-reviewed-today">0</strong><small>次复习</small></div>
+              <div><span>已掌握</span><strong id="vocab-mastered">0</strong><small>熟练度 ≥ 80</small></div>
+              <div><span>连续</span><strong id="vocab-streak">0</strong><small>天有复习</small></div>
+            </div>
+          </div>
+
+          <div class="vocab-layout">
+            <article class="surface review-stage">
+              <div class="review-stage-head">
+                <div><p class="section-label">ROLLING REVIEW</p><h2>滚动复习</h2></div>
+                <div class="review-group-setup"><label>每组 <select id="review-group-size" aria-label="每组单词数"><option value="5">5 个</option><option value="10" selected>10 个</option><option value="15">15 个</option><option value="20">20 个</option><option value="30">30 个</option></select></label><button class="button ghost" id="start-review-group" type="button">开始新一组</button></div>
+              </div>
+              <div class="review-session-line"><span id="review-progress-label">等待导入单词</span><span id="review-phase-label">记忆阶段</span></div>
+              <div class="review-rail" aria-hidden="true"><span id="review-rail-progress"></span></div>
+              <div id="review-memory-panel">
+                <div id="review-card" class="review-card empty">
+                  <div class="review-index" id="review-index">WORD · 000</div>
+                  <button class="review-favorite-button" id="review-favorite" type="button" title="收藏当前单词" aria-label="收藏当前单词" disabled>☆</button>
+                  <button class="word-audio-button" id="review-speak" type="button" title="朗读单词" aria-label="朗读当前单词" disabled>▶</button>
+                  <div class="review-word" id="review-word">词库还是空的</div>
+                  <div class="review-hint" id="review-hint">导入 TXT、CSV 或 TSV，马上开始第一轮。</div>
+                  <div class="review-answer" id="review-answer" hidden></div>
+                </div>
+                <div class="review-navigation">
+                  <button class="review-nav-button" id="review-previous" type="button" disabled><span>←</span>上一个</button>
+                  <button class="button primary review-reveal" id="review-reveal" disabled>显示释义</button>
+                  <button class="review-nav-button" id="review-next" type="button" disabled>下一个<span>→</span></button>
+                </div>
+                <div class="review-controls">
+                  <div class="rating-row" id="rating-row" hidden>
+                    <button data-rating="again"><b>忘了</b><span>10 分钟后</span></button>
+                    <button data-rating="hard"><b>模糊</b><span>约 1 天</span></button>
+                    <button data-rating="good"><b>记住</b><span>间隔增长</span></button>
+                    <button data-rating="easy"><b>很熟</b><span>更久后再见</span></button>
+                  </div>
+                </div>
+              </div>
+              <div class="review-group-choice" id="review-group-choice" hidden>
+                <div class="review-choice-stamp">GROUP COMPLETE</div>
+                <h3>本组 <span id="review-choice-count">10</span> 个单词已看完</h3>
+                <p>现在用三选一建立英汉双向记忆，或跳过测验直接进入下一组。</p>
+                <div class="review-choice-actions"><button class="choice-test" id="start-review-quiz" type="button"><span>推荐</span><strong>开始本组测验</strong><small>英译中 + 中选英，每题 3 个选项</small></button><button class="choice-skip" id="skip-review-quiz" type="button"><strong>跳过测验，开始新一组</strong><small>不会把跳过记作“已掌握”</small></button></div>
+                <button class="text-button" id="return-review-group" type="button">← 回去再看一遍</button>
+              </div>
+              <div class="review-quiz" id="review-quiz" hidden>
+                <div class="quiz-checkpoint"><span>CHECKPOINT</span><strong id="review-quiz-progress">1 / 10</strong></div>
+                <div class="quiz-direction" id="review-quiz-direction">看英文，选中文</div>
+                <div class="quiz-question" id="review-quiz-question"></div>
+                <div class="quiz-options" id="review-quiz-options"></div>
+                <div class="quiz-feedback" id="review-quiz-feedback" hidden></div>
+                <button class="button primary" id="review-quiz-next" type="button" hidden>下一题</button>
+              </div>
+              <button class="text-button review-all" id="review-all">从全部词汇中开始一组</button>
+            </article>
+
+            <aside class="vocab-side">
+              <article class="surface import-card">
+                <div class="section-head"><div><p class="section-label">IMPORT</p><h2>导入你的单词文本</h2></div><span class="file-chip">TXT · CSV · TSV</span></div>
+                <p class="import-help">每行一个词，推荐写成 <code>apple[TAB]苹果</code>。也支持逗号、等号、冒号或短横线分隔。</p>
+                <textarea id="vocab-paste" placeholder="apple    苹果&#10;resilient    有韧性的&#10;commitment    承诺；投入"></textarea>
+                <div class="button-row"><button class="button primary" id="import-file">选择文本文件</button><button class="button ghost" id="import-paste">导入粘贴内容</button></div>
+                <p class="import-result" id="import-result">重复单词会自动跳过，原有记忆进度不会被覆盖。</p>
+              </article>
+              <article class="surface memory-note-card">
+                <p class="section-label">MEMORY</p>
+                <h2>记忆会保存在本机</h2>
+                <p>每个词独立记录熟练度、复习次数、遗忘次数和下次出现时间；当前学到第几个也会自动续接。退出软件后不会重头开始。</p>
+                <div class="memory-legend"><span><i class="new"></i>新词</span><span><i class="learning"></i>学习中</span><span><i class="mastered"></i>已掌握</span></div>
+              </article>
+            </aside>
+          </div>
+
+          <article class="surface vocab-library">
+            <div class="section-head library-head">
+              <div><p class="section-label">WORD LIBRARY</p><h2>词库与记忆进度</h2><small class="library-help">星标词会优先进入复习；“只看收藏”可集中练习。</small></div>
+              <div class="library-tools"><button id="favorite-word-filter" type="button" aria-pressed="false"><span>★</span> 只看收藏 <em id="favorite-word-count">0</em></button><input id="vocab-search" type="search" placeholder="搜索单词或释义…" aria-label="搜索单词"></div>
+            </div>
+            <div class="vocab-table-head"><span></span><span>英文单词 / 短语</span><span>中文释义 / 备注</span><span>熟练度</span><span>下次复习</span><span></span><span></span></div>
+            <div id="vocab-list" class="vocab-list"></div>
+          </article>
+          </section>
+
+          <section class="english-panel" data-english-panel="books">
+            <article class="book-shelf-hero">
+              <div><p class="section-label">ORIGINAL BOOKS / 原版书架</p><h2>拖进来，剩下的交给书架</h2><p>EPUB、文字型 PDF、DOCX、TXT、MD 和 HTML 会直接拆成章节。旧格式会告诉你该用 WPS 还是 Calibre 转换。</p></div>
+              <button class="button primary" id="choose-book-files" type="button">＋ 导入原版书</button>
+            </article>
+            <div class="book-format-rail" aria-label="书籍格式支持">
+              <span><b>直接阅读</b> EPUB · PDF · DOCX · TXT · MD · HTML</span>
+              <span><b>扫描书</b> 识别后提示按页 OCR</span>
+              <span><b>需转换</b> DOC · RTF · ODT · MOBI · AZW3</span>
+            </div>
+            <div class="local-shelf-link" id="local-shelf-link" data-state="empty">
+              <span class="local-shelf-mark">⌂</span>
+              <div><strong>关联电脑里的书库文件夹</strong><small id="local-shelf-path">关联后，新放入该文件夹的书会自动出现在这里；源文件不会被移动或删除。</small></div>
+              <button class="button ghost" id="sync-local-books" type="button">立即同步</button>
+              <button class="button secondary" id="choose-local-book-folder" type="button">选择文件夹</button>
+            </div>
+            <div class="book-drop-zone" id="book-drop-zone" tabindex="0"><i>⇣</i><div><strong>把电子书拖到这里</strong><small id="book-import-status">文件只保存在本机；无需先改名或手动复制正文。</small></div><button class="button ghost" id="book-drop-choose" type="button">选择文件</button></div>
+            <div class="book-workspace">
+              <aside class="surface book-shelf-panel">
+                <div class="book-panel-head"><div><p class="section-label">MY SHELF</p><h2>我的书架</h2></div><button id="book-add-small" type="button">＋</button></div>
+                <input id="book-search" type="search" placeholder="搜索书名或作者…" aria-label="搜索书籍">
+                <div id="book-list" class="book-list"></div>
+              </aside>
+              <article class="surface book-reader" id="book-reader">
+                <div class="book-reader-empty" id="book-reader-empty"><span>BOOK</span><h2>选一本书开始阅读</h2><p>书籍会按章节保存阅读位置，退出后也不会丢失。</p></div>
+                <div id="book-reader-content" hidden>
+                  <header class="book-reader-head"><div><p id="book-reader-kicker">ORIGINAL READING</p><h2 id="book-reader-title"></h2><small id="book-reader-meta"></small></div><div><button class="button primary" id="book-popout" type="button">进入双语阅读</button><button class="button ghost" id="book-reparse" type="button">重新整理正文</button><button class="button ghost" id="book-open-source" type="button">打开原文件</button><button class="button danger" id="book-delete" type="button">删除</button></div></header>
+                  <div class="book-reader-grid">
+                    <nav class="book-chapter-nav"><div><span>目录</span><b id="book-reading-progress">0%</b></div><div id="book-chapter-list"></div></nav>
+                    <main class="book-page"><div class="book-page-tools"><span id="book-current-chapter"></span><div><button id="book-font-down" type="button">A−</button><button id="book-font-up" type="button">A＋</button></div></div><div id="book-chapter-text" class="book-chapter-text"></div></main>
+                    <aside class="book-word-lab"><div class="book-word-lab-head"><div><p class="section-label">WORD LAB</p><h3>本章候选词</h3></div><span id="book-candidate-count">0</span></div><p>先按词频和已知词库筛选，再决定哪些值得交给 AI 深挖。</p><div class="book-word-actions"><select id="book-target-word-list" aria-label="目标词库"></select><button class="button ghost" id="analyze-book-words" type="button">分析本章</button></div><div id="book-word-candidates" class="book-word-candidates"></div><div class="book-word-footer"><button class="button ghost" id="copy-book-ai-prompt" type="button">复制 AI 词汇指令</button><button class="button primary" id="save-book-candidates" type="button">加入所选词</button></div></aside>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="english-panel" data-english-panel="articles">
+            <article class="english-reading-hero">
+              <div><p class="section-label">ANNOTATED READING / 批注阅读</p><h2>把值得重读的英文留在这里</h2><p>保存网址、全文或片段。阅读时点击单词即可入库，选中文字还能收藏成句子或短语。</p></div>
+              <div class="button-row"><button class="button hero-ghost" id="add-english-article">手动收藏</button><button class="button primary" id="open-learning-import">＋ 导入学习材料</button></div>
+            </article>
+            <div class="material-intake-strip" id="material-intake-strip" tabindex="0"><span>⇣</span><div><strong>把文章、试卷、图片或文档拖到这里</strong><small>也支持 DOCX、PDF、TXT、MD、CSV、TSV 和剪贴板截图。</small></div><button class="button ghost" id="choose-learning-material">选择文件</button><button class="button ghost" id="paste-learning-material">粘贴剪贴板</button></div>
+            <div class="reading-workbench">
+              <aside class="surface article-index">
+                <div class="article-index-head"><div><p class="section-label">READING SHELF</p><h2>文章书架</h2></div><button class="mini-add" id="add-english-article-mini" title="收藏文章">＋</button></div>
+                <input id="article-search" type="search" placeholder="搜索标题、来源或标签…">
+                <div id="article-list" class="article-list"></div>
+              </aside>
+              <article class="surface reading-sheet" id="reading-sheet">
+                <div id="reading-empty" class="reading-empty"><span>Aa</span><h2>选择一篇文章开始阅读</h2><p>点击英文单词可以朗读和加入词库；选中一段文字可以收藏句子或短语。</p></div>
+                <div id="reading-content" hidden>
+                  <div class="reading-sheet-head">
+                    <div><p class="section-label" id="reading-source">SAVED READING</p><h2 id="reading-title"></h2><div class="reading-meta" id="reading-meta"></div></div>
+                    <div class="reading-actions"><button class="button ghost" id="open-article-source">打开原网页</button><button class="button ghost" id="edit-english-article">编辑</button><button class="button danger" id="delete-english-article">删除</button></div>
+                  </div>
+                  <div class="english-reading-set-layout">
+                    <div class="reading-primary-column"><div class="selection-toolbar"><span>选中正文中的内容后：</span><button id="save-selected-sentence">收藏句子</button><button id="save-selected-phrase">加入短语库</button></div><div class="reading-note" id="reading-note"></div><div class="article-body" id="article-body"></div></div>
+                    <aside class="english-question-margin" id="english-reading-question-panel" hidden><div class="question-margin-head"><p class="section-label">READING QUESTIONS</p><h3 id="english-reading-set-type">阅读理解</h3><span id="english-reading-progress">0 / 0</span></div><div class="english-question-nav" id="english-question-nav"></div><div id="english-reading-question" class="english-reading-question"></div></aside>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="english-panel" data-english-panel="sentences">
+            <div class="sentence-toolbar">
+              <div><p class="section-label">SENTENCE CARDS / 句子卡片</p><h2>收藏的不只是句子，还有当时觉得它有用的原因</h2></div>
+              <button class="button primary" id="add-english-sentence">＋ 收藏句子</button>
+            </div>
+            <article class="surface sentence-filter-bar"><input id="sentence-search" type="search" placeholder="搜索句子、来源、标签或备注…"><span id="sentence-filter-summary">0 张卡片</span></article>
+            <div id="sentence-list" class="sentence-card-grid"></div>
+          </section>
+
+          <section class="english-panel" data-english-panel="ai">
+            <article class="ai-package-hero">
+              <div><p class="section-label">AI STUDY PACKAGE / 学习包</p><h2>把你的收藏，整理成真正能教你的指令</h2><p>内容只在本机组合。复制后粘贴到 DeepSeek、ChatGPT 或其他网页即可，无需 API。</p></div>
+              <div class="package-stamp"><strong id="ai-selected-count">0</strong><span>项学习材料</span></div>
+            </article>
+            <div class="ai-package-layout">
+              <aside class="surface ai-package-controls">
+                <div class="package-section"><p class="section-label">LEARNING GOAL</p><h3>这一次想练什么？</h3><div class="goal-checks" id="ai-goals">
+                  <label><input type="checkbox" value="精读讲解" checked>精读讲解</label><label><input type="checkbox" value="语法拆解" checked>语法拆解</label><label><input type="checkbox" value="词汇运用" checked>词汇运用</label><label><input type="checkbox" value="仿写训练" checked>仿写训练</label><label><input type="checkbox" value="翻译练习">翻译练习</label><label><input type="checkbox" value="出题测试">出题测试</label>
+                </div></div>
+                <div class="package-section"><p class="section-label">DEPTH</p><h3>讲解深度</h3><select id="ai-prompt-depth"><option value="brief">简洁讲解</option><option value="standard" selected>标准精读</option><option value="academic">学术分析</option></select></div>
+                <div class="package-section"><div class="package-title-row"><div><p class="section-label">MATERIALS</p><h3>选择学习材料</h3></div><div><button class="text-button" id="ai-import-material">＋ 导入</button><button class="text-button" id="select-all-ai-materials">全选</button></div></div><div id="ai-material-list" class="ai-material-list"></div></div>
+                <div class="package-section"><p class="section-label">AI WEBSITE</p><h3>打开哪个网页？</h3><input id="ai-website-url" type="url" placeholder="https://chat.deepseek.com"><small>只会打开网页，不会自动上传内容。</small></div>
+              </aside>
+              <article class="surface ai-prompt-paper">
+                <div class="prompt-paper-head"><div><p class="section-label">PROMPT PREVIEW</p><h2>学习指令预览</h2></div><span id="ai-prompt-length">0 字</span></div>
+                <textarea id="ai-prompt-preview" spellcheck="false"></textarea>
+                <div class="prompt-actions"><button class="button ghost" id="refresh-ai-prompt">重新生成</button><button class="button primary" id="copy-ai-prompt">复制提示词</button><button class="button secondary" id="copy-open-ai">复制并打开 AI 网页</button></div>
+                <p class="privacy-note">本应用不会把文章、句子或单词自动发送到任何服务。</p>
+              </article>
+            </div>
+          </section>
+        </section>
+
+        <section class="page" id="page-pomodoro">
+          <div class="pomodoro-layout">
+            <article class="surface timer-card">
+              <div class="mode-badge" id="timer-mode">专注时间</div>
+              <div class="timer-ring" id="timer-ring"><div><strong id="timer-display">25:00</strong><span id="timer-caption">保持专注，只做一件事</span></div></div>
+              <div class="timer-actions"><button class="round-action" id="timer-reset" title="重置">↺</button><button class="timer-main" id="timer-toggle">开始专注</button><button class="round-action" id="timer-skip" title="跳到下一阶段">⇥</button></div>
+            </article>
+            <div class="timer-side">
+              <article class="surface session-note"><p class="section-label">本轮意图</p><h2>这一轮，你只想完成什么？</h2><select id="focus-task"><option value="">不绑定待办</option></select><textarea id="focus-note" placeholder="可以写下这一轮的目标……"></textarea></article>
+              <article class="surface focus-score"><div><strong id="completed-pomodoros">0</strong><span>今日完成轮数</span></div><div class="tomato-row" id="tomato-row"></div></article>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" id="page-calendar">
+          <div class="calendar-layout">
+            <article class="surface calendar-board">
+              <div class="calendar-head">
+                <div><p class="section-label">DAILY ARCHIVE / 每日存档</p><h2 id="calendar-month-title">本月</h2></div>
+                <div class="calendar-controls"><button class="round-button" id="calendar-prev">‹</button><button class="text-button" id="calendar-today">回到今天</button><button class="round-button" id="calendar-next">›</button></div>
+              </div>
+              <div class="calendar-weekdays"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
+              <div class="calendar-grid" id="calendar-grid"></div>
+            </article>
+            <aside class="surface day-archive">
+              <div class="day-archive-head"><p class="section-label">DAY FILE</p><h2 id="calendar-day-title">今天做过什么</h2><p id="calendar-day-summary">完成记录会自动归档到这里。</p></div>
+              <div class="day-activity-list" id="calendar-day-list"></div>
+              <form id="calendar-note-form" class="calendar-note-form"><textarea id="calendar-note" maxlength="300" placeholder="补记今天做过的事……"></textarea><button class="button primary">存入这一天</button></form>
+            </aside>
+          </div>
+        </section>
+
+        <section class="page" id="page-civilService">
+          <article class="exam-dossier-hero">
+            <div class="exam-hero-copy">
+              <p class="section-label">EXAM DOSSIER / 备考卷宗</p>
+              <h2>把题目、错因与好文章放回同一条学习线索</h2>
+              <p>图片先进入待整理箱，确认题源、分类和标签后再进入题库。每一次练习都会留下可追溯的记录。</p>
+              <div class="button-row"><button class="button primary" id="exam-smart-import">＋ 智能导入 / OCR</button><button class="button exam-ghost" id="exam-import">普通文件导入</button><button class="button exam-ghost" id="exam-new-question">手动建题</button><button class="button exam-ghost" id="exam-new-resource">保存申论素材</button></div>
+            </div>
+            <div class="exam-folio" aria-label="考公学习统计">
+              <span>卷宗进度</span><strong id="exam-hero-question-count">0</strong><small>道题已归档</small>
+              <i><b id="exam-hero-mastery"></b></i>
+              <em id="exam-hero-mastery-label">还没有复刷记录</em>
+            </div>
+          </article>
+
+          <div class="exam-tabs" id="exam-tabs" role="tablist">
+            <button class="active" data-exam-tab="resources">资料库 <span id="exam-resource-count">0</span></button>
+            <button data-exam-tab="questions">题库与练习 <span id="exam-question-count">0</span></button>
+            <button data-exam-tab="mistakes">错题本 <span id="exam-mistake-count">0</span></button>
+            <button data-exam-tab="analytics">数据分析</button>
+          </div>
+
+          <section class="exam-panel active" data-exam-panel="resources">
+            <div class="exam-workbench">
+              <aside class="surface exam-index-card">
+                <p class="section-label">RESOURCE INDEX</p><h3>资料类型</h3>
+                <div class="exam-filter-list" id="exam-resource-filters">
+                  <button class="active" data-resource-filter="all">全部资料</button>
+                  <button data-resource-filter="file">文件与试卷</button>
+                  <button data-resource-filter="article">申论文章</button>
+                  <button data-resource-filter="excerpt">优秀片段</button>
+                  <button data-resource-filter="idea">写作思路</button>
+                </div>
+                <div class="storage-note"><span>本地文件占用</span><strong id="exam-storage-size">0 KB</strong><small>删除资料时可以同时永久删除文件。</small></div>
+              </aside>
+              <div class="exam-main-column">
+                <div class="exam-toolbar"><input id="exam-resource-search" type="search" placeholder="搜索标题、题源或标签…"><button class="button ghost" id="exam-add-text-resource">＋ 新建文字资料</button></div>
+                <div class="exam-dropzone" data-exam-drop="resource" tabindex="0"><span>⇣</span><div><strong>把图片、PDF、Word 或文本拖到这里</strong><small>文件只保存在考公资料库，不会复制到日历。</small></div><button class="button primary" data-choose-exam="resource">选择文件</button></div>
+                <div class="exam-resource-grid" id="exam-resource-list"></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="exam-panel" data-exam-panel="questions">
+            <div class="surface exam-question-surface">
+              <div class="exam-toolbar question-toolbar">
+                <div><p class="section-label">QUESTION BANK</p><h2>题库与待整理箱</h2></div>
+                <select id="exam-question-category"><option value="all">全部分类</option></select>
+                <input id="exam-question-search" type="search" placeholder="搜索题干、题源或标签…">
+                <button class="button primary" id="exam-add-question">＋ 新建题目</button>
+              </div>
+              <div class="exam-group-studio" id="exam-group-studio" hidden>
+                <aside class="exam-group-index"><div><p class="section-label">MATERIAL SETS</p><h3>材料题组</h3></div><div id="exam-group-list" class="exam-group-list"></div></aside>
+                <article class="exam-material-desk"><div class="exam-material-head"><div><span id="exam-group-type">材料题组</span><h2 id="exam-group-title">选择一组材料</h2><small id="exam-group-meta"></small></div><button class="button ghost" id="exam-group-open-source" type="button">打开原文件</button></div><div class="exam-material-paper" id="exam-group-passage"></div></article>
+                <aside class="exam-question-desk"><div class="exam-question-desk-head"><span>子题练习</span><strong id="exam-group-progress">0 / 0</strong></div><div class="exam-group-question-nav" id="exam-group-question-nav"></div><div id="exam-group-question-detail" class="exam-group-question-detail"></div></aside>
+              </div>
+              <div class="exam-dropzone compact" data-exam-drop="question" tabindex="0"><span>＋</span><div><strong>一键拖入题库</strong><small>图片会成为待整理题目；可继续补充题干、题源、分类和标签。</small></div><button class="button ghost" data-choose-exam="question">选择文件</button></div>
+              <div class="question-library-divider"><span>全部单题</span><small>材料题组中的子题也会在这里独立记录错题状态</small></div>
+              <div class="exam-question-list" id="exam-question-list"></div>
+            </div>
+          </section>
+
+          <section class="exam-panel" data-exam-panel="mistakes">
+            <div class="mistake-stat-row">
+              <article><span>累计错题</span><strong id="mistake-total">0</strong><small>历史进入过错题本</small></article>
+              <article><span>待消化</span><strong id="mistake-active">0</strong><small>仍需继续复刷</small></article>
+              <article><span>错题消化率</span><strong id="mistake-digestion">0%</strong><small>已掌握 ÷ 累计错题</small></article>
+              <article><span>复刷再错率</span><strong id="mistake-repeat-rate">0%</strong><small>复刷中再次答错</small></article>
+            </div>
+            <article class="surface exam-question-surface">
+              <div class="exam-toolbar question-toolbar"><div><p class="section-label">MISTAKE LOOP</p><h2>反复刷，直到真正掌握</h2></div><button class="button ghost" id="copy-mistake-md">一键复制给 AI</button><button class="button primary" id="export-mistake-md">导出 .md</button></div>
+              <div class="exam-dropzone compact mistake-drop" data-exam-drop="mistake" tabindex="0"><span>!</span><div><strong>把错题图片直接拖进来</strong><small>导入后自动标记为“待复刷”，仍会先进入待整理状态。</small></div><button class="button ghost" data-choose-exam="mistake">选择图片或文件</button></div>
+              <div class="exam-question-list" id="exam-mistake-list"></div>
+            </article>
+          </section>
+
+          <section class="exam-panel" data-exam-panel="analytics">
+            <div class="analytics-grid">
+              <article class="surface analysis-ledger"><p class="section-label">CATEGORY LEDGER</p><h2>分类表现</h2><div id="exam-category-analysis" class="analysis-bars"></div></article>
+              <article class="surface analysis-ledger"><p class="section-label">ERROR REASONS</p><h2>主要错因</h2><div id="exam-reason-analysis" class="reason-cloud"></div></article>
+              <article class="surface analysis-ledger wide"><div class="section-head"><div><p class="section-label">AI HANDOFF</p><h2>生成阶段学习档案</h2></div><button class="button primary" id="copy-exam-analysis">复制 Markdown</button></div><p class="analysis-help">包含题源、分类表现、错因分布、尚未掌握的错题和给 AI 的分析要求，不会自动上传任何文件。</p><pre id="exam-analysis-preview"></pre></article>
+            </div>
+          </section>
+        </section>
+
+        <section class="page" id="page-finalExam">
+          <article class="final-hero">
+            <div class="final-hero-copy">
+              <p class="section-label">FINAL LEDGER / 期末账页</p>
+              <h2>把复习资料变成一轮轮能记住的题</h2>
+              <p>PDF、TXT 会先拆成原文挖空、名词解释和简答拆项；原文件中的选择题保留原样。答案只取自资料，不补写不存在的内容。</p>
+              <div class="button-row"><button class="button primary" id="final-import">＋ 导入 PDF / TXT</button><button class="button final-ghost" id="final-new-session">开始新一组</button></div>
+            </div>
+            <div class="final-memory-stamp"><span>今日待复习</span><strong id="final-due-count">0</strong><small>按错题与到期时间优先</small><i><b id="final-mastery-ring"></b></i></div>
+          </article>
+
+          <div class="final-tabs" id="final-tabs" role="tablist">
+            <button class="active" data-final-tab="practice">随机练习</button>
+            <button data-final-tab="bank">题库 <span id="final-bank-count">0</span></button>
+            <button data-final-tab="mistakes">错题本 <span id="final-mistake-count">0</span></button>
+            <button data-final-tab="records">学习记录</button>
+          </div>
+
+          <section class="final-panel active" data-final-panel="practice">
+            <div class="final-layout">
+              <aside class="surface final-index">
+                <p class="section-label">STUDY ROUTE</p><h3>本轮范围</h3>
+                <label>资料<select id="final-source-filter"><option value="all">全部资料</option></select></label>
+                <label>章节<select id="final-chapter-filter"><option value="all">全部章节</option></select></label>
+                <label>题型<select id="final-type-filter"><option value="all">全部题型</option><option value="cloze">原文挖空</option><option value="term">名词解释</option><option value="list-cloze">简答拆项</option><option value="choice">原题选择</option></select></label>
+                <label>每组<select id="final-session-size"><option value="5">5 题</option><option value="10" selected>10 题</option><option value="15">15 题</option><option value="20">20 题</option></select></label>
+                <div class="final-route-note"><span>记忆规则</span><p>答错后进入错题本；连续答对 2 次后移出待复习，但历史记录仍保留。</p></div>
+              </aside>
+              <article class="surface final-practice-card" id="final-practice-card"></article>
+              <aside class="surface final-session-ledger">
+                <p class="section-label">MEMORY LEDGER</p><h3>这组的账</h3>
+                <div class="final-ledger-number"><strong id="final-session-progress">0 / 0</strong><span>当前进度</span></div>
+                <dl><div><dt>答对</dt><dd id="final-session-correct">0</dd></div><div><dt>答错</dt><dd id="final-session-wrong">0</dd></div><div><dt>到期</dt><dd id="final-session-due">0</dd></div></dl>
+                <button class="button final-ghost" id="final-abandon-session">结束本组</button>
+              </aside>
+            </div>
+          </section>
+
+          <section class="final-panel" data-final-panel="bank">
+            <article class="surface final-bank-surface">
+              <div class="final-bank-head"><div><p class="section-label">QUESTION BANK</p><h2>资料与题库</h2></div><span id="final-import-summary">导入资料后会先生成可核对的题目。</span></div>
+              <div class="final-dropzone" id="final-dropzone" tabindex="0"><span>⇣</span><div><strong>拖入 PDF 或 TXT</strong><small>PDF 会读取可复制文字；扫描版会提示改用 OCR。</small></div><button class="button primary" id="final-choose-file">选择文件</button></div>
+              <div id="final-source-list" class="final-source-list"></div>
+              <div id="final-question-list" class="final-question-list"></div>
+            </article>
+          </section>
+
+          <section class="final-panel" data-final-panel="mistakes">
+            <div class="final-stat-row"><article><span>历史错题</span><strong id="final-ever-wrong">0</strong></article><article><span>待复习</span><strong id="final-active-wrong">0</strong></article><article><span>已纠正</span><strong id="final-mastered-wrong">0</strong></article><article><span>正确率</span><strong id="final-accuracy">0%</strong></article></div>
+            <article class="surface final-bank-surface"><div class="final-bank-head"><div><p class="section-label">ERROR BOOK</p><h2>错题会留下来，直到真正答会</h2></div><button class="button final-ghost" id="final-practice-mistakes">只练错题</button></div><div id="final-mistake-list" class="final-question-list"></div></article>
+          </section>
+
+          <section class="final-panel" data-final-panel="records">
+            <div class="final-stat-row"><article><span>练习次数</span><strong id="final-attempt-count">0</strong></article><article><span>已见题目</span><strong id="final-seen-count">0</strong></article><article><span>平均掌握</span><strong id="final-average-mastery">0%</strong></article><article><span>资料数量</span><strong id="final-source-count">0</strong></article></div>
+            <article class="surface final-record-surface"><p class="section-label">STUDY TRACE</p><h2>最近练习</h2><div id="final-record-list" class="final-record-list"></div></article>
+          </section>
+        </section>
+
+        <section class="page" id="page-settings">
+          <div class="settings-grid">
+            <article class="surface setting-card wide module-setting-card">
+              <div class="setting-title"><span class="setting-icon">▦</span><div><h2>页面名称与显示</h2><p>可以改名、隐藏和调整顺序；页面原有内容与历史数据不会改变。</p></div></div>
+              <div class="module-manager-head"><span>页面</span><span>显示名称</span><span>侧栏显示</span><span>排序</span></div>
+              <div id="module-manager" class="module-manager"></div>
+              <div class="module-manager-actions">
+                <button class="button ghost" id="restore-module-defaults" type="button">恢复默认名称与顺序</button>
+                <div class="module-change-actions" id="module-change-actions" data-state="clean"><span><i></i><b id="module-change-status">没有未保存的修改</b></span><button class="button ghost" id="cancel-module-changes" type="button" disabled>取消</button><button class="button primary" id="confirm-module-changes" type="button" disabled>确定并应用</button></div>
+                <small>取消勾选后，点击“确定并应用”才会从侧栏隐藏；“今日助手”和“设置”始终保留。</small>
+              </div>
+            </article>
+            <article class="surface setting-card wide theme-setting-card">
+              <div class="setting-title"><span class="setting-icon">◐</span><div><h2>主题设置</h2><p>奶咖是默认外观，也可以换一套气质或自己调颜色。</p></div></div>
+              <div class="theme-presets" id="theme-presets" role="radiogroup" aria-label="主题预设">
+                <button type="button" data-theme="latte" aria-pressed="true"><span class="theme-swatch latte"><i></i><i></i><i></i></span><strong>奶咖</strong><small>温暖、安静</small></button>
+                <button type="button" data-theme="mist" aria-pressed="false"><span class="theme-swatch mist"><i></i><i></i><i></i></span><strong>晨雾</strong><small>清爽、克制</small></button>
+                <button type="button" data-theme="forest" aria-pressed="false"><span class="theme-swatch forest"><i></i><i></i><i></i></span><strong>森林</strong><small>沉静、专注</small></button>
+                <button type="button" data-theme="custom" aria-pressed="false"><span class="theme-swatch custom"><i></i><i></i><i></i></span><strong>自定义</strong><small>使用下方颜色</small></button>
+              </div>
+              <div class="custom-theme-controls">
+                <label>强调色<input id="theme-accent" type="color" value="#8f6245"></label>
+                <label>页面背景<input id="theme-canvas" type="color" value="#f3e7d5"></label>
+                <label>内容底色<input id="theme-paper" type="color" value="#fffaf2"></label>
+                <label>侧栏颜色<input id="theme-sidebar" type="color" value="#6f4933"></label>
+              </div>
+            </article>
+            <article class="surface setting-card wide translation-setting-card">
+              <div class="setting-title"><span class="setting-icon">译</span><div><h2>在线翻译</h2><p>正式翻译服务用于悬浮查词和双语阅读。译文按段落保存在本机，不会反复计费。</p></div></div>
+              <div class="translation-provider-layout">
+                <div class="translation-provider-choice">
+                  <label>翻译服务<select id="translation-provider"><option value="baidu">百度翻译</option><option value="youdao">有道翻译</option></select></label>
+                  <p>推荐先使用百度或有道的开发者 API。免费公共接口不再作为默认翻译来源。</p>
+                  <label class="switch-row"><span>阅读时自动翻译可见段落</span><input id="auto-translate-reading" type="checkbox"><i></i></label>
+                </div>
+                <div class="translation-credential" data-provider-fields="baidu">
+                  <label>百度鉴权方式<select id="translation-baidu-auth-mode"><option value="apiKey">新版 API Key（推荐）</option><option value="legacy">传统 App ID + 密钥</option></select></label>
+                  <label>百度 App ID<input id="translation-baidu-app-id" autocomplete="off" placeholder="开发者信息中的数字 App ID"></label>
+                  <p class="translation-field-help wide">“API 名称”、百度昵称和账号都不参与鉴权。App ID 请在“开发者中心 → 开发者信息”复制，不能填 SK- 开头的 API Key。</p>
+                  <label data-baidu-auth-field="apiKey">百度 API Key<input id="translation-baidu-api-key" type="password" autocomplete="new-password" placeholder="以 SK- 开头，输入后加密保存"></label>
+                  <label data-baidu-auth-field="apiKey">翻译模式<select id="translation-baidu-model"><option value="nmt">快速机器翻译（阅读推荐）</option><option value="llm">大模型精译（较慢）</option></select></label>
+                  <label data-baidu-auth-field="legacy">开发者密钥<input id="translation-baidu-secret" type="password" autocomplete="new-password" placeholder="开发者信息中的密钥"></label>
+                  <div class="translation-link-actions wide"><button class="button ghost" id="open-baidu-developer" type="button">查看 App ID</button><button class="button ghost" id="open-baidu-api-keys" type="button">管理 API Key</button><button class="button ghost" id="open-baidu-services" type="button">检查服务是否开通</button></div>
+                </div>
+                <div class="translation-credential" data-provider-fields="youdao" hidden>
+                  <label>有道应用 ID<input id="translation-youdao-app-key" autocomplete="off" placeholder="有道智云应用 ID"></label>
+                  <label>有道应用密钥<input id="translation-youdao-secret" type="password" autocomplete="new-password" placeholder="输入后加密保存在这台电脑"></label>
+                </div>
+              </div>
+              <div class="translation-provider-foot"><span id="translation-provider-status" data-state="idle">尚未检测配置</span><button class="button ghost" id="test-translation-provider" type="button">保存并测试翻译</button></div>
+            </article>
+            <article class="surface setting-card">
+              <div class="setting-title"><span class="setting-icon">Aa</span><div><h2>每日单词计划</h2><p>保存后会自动出现在今日计划中，并随复习进度更新。</p></div></div>
+              <div class="form-grid two word-plan-settings">
+                <label>每天复习<input id="daily-word-goal" type="number" min="0" max="500"><small>个</small></label>
+                <label>英语发音<select id="pronunciation-locale"><option value="en-US">美式英语</option><option value="en-GB">英式英语</option></select></label>
+              </div>
+              <div class="pronunciation-rate"><label for="pronunciation-rate">朗读速度</label><input id="pronunciation-rate" type="range" min="0.7" max="1.3" step="0.1"><strong id="pronunciation-rate-label">1.0×</strong></div>
+              <label class="switch-row"><span>切换到新单词时自动朗读</span><input id="auto-pronounce" type="checkbox"><i></i></label>
+              <div class="pronunciation-status" id="pronunciation-status" data-state="loading"><i></i><span>正在读取 Windows 语音……</span></div>
+              <div class="button-row pronunciation-actions"><button class="button ghost" type="button" id="test-pronunciation">试听发音</button><button class="button ghost" type="button" id="open-speech-settings">打开 Windows 语音设置</button></div>
+            </article>
+            <article class="surface setting-card">
+              <div class="setting-title"><span class="setting-icon">◉</span><div><h2>桌宠显示</h2><p>控制桌面角色和置顶方式。</p></div></div>
+              <label class="switch-row"><span>显示桌宠</span><input id="setting-pet-visible" type="checkbox"><i></i></label>
+              <label class="switch-row"><span>始终置于其他窗口上方</span><input id="setting-pet-top" type="checkbox"><i></i></label>
+              <div class="button-row"><button class="button secondary" id="open-assets">打开角色图片文件夹</button><button class="button ghost" id="reload-character">重新载入图片</button></div>
+            </article>
+            <article class="surface setting-card">
+              <div class="setting-title"><span class="setting-icon">◷</span><div><h2>提醒与安静时间</h2><p>安静时间内不弹出通知。</p></div></div>
+              <div class="form-grid three"><label>安静开始<input id="quiet-start" type="time"></label><label>安静结束<input id="quiet-end" type="time"></label><label>课程提前提醒<input id="course-notice" type="number" min="0" max="120"><small>分钟</small></label></div>
+              <button class="button ghost" id="test-reminder">测试通知</button>
+            </article>
+            <article class="surface setting-card wide">
+              <div class="setting-title"><span class="setting-icon">◎</span><div><h2>番茄钟时长</h2><p>修改后重置计时器即可生效。</p></div></div>
+              <div class="form-grid timer-settings"><label>专注<input id="focus-minutes" type="number" min="1" max="180"><small>分钟</small></label><label>短休息<input id="break-minutes" type="number" min="1" max="60"><small>分钟</small></label><label>逐帧动画速度<input id="frame-ms" type="number" min="40" max="2000"><small>毫秒</small></label></div>
+              <div class="pet-scale-setting">
+                <div><span>人物大小</span><strong id="pet-scale-percent">180%</strong><small>拖动滑杆实时预览；也可以直接输入 0.2–5 倍，或在桌面人物上滚动鼠标滚轮。</small></div>
+                <input id="pet-scale-range" type="range" min="0.2" max="5" step="0.05" aria-label="人物大小滑杆">
+                <label><input id="pet-scale" type="number" min="0.2" max="5" step="0.05" aria-label="人物缩放倍数"><span>倍</span></label>
+              </div>
+              <div class="button-row"><button class="button primary" id="save-settings">保存全部设置</button><button class="button ghost" id="open-codex">打开 Codex</button><button class="button danger" id="settings-quit">完全退出软件</button></div>
+            </article>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <dialog id="course-dialog">
+    <form id="course-form" method="dialog">
+      <div class="dialog-head"><div><p class="section-label">COURSE</p><h2 id="course-dialog-title">添加课程</h2></div><button type="button" class="dialog-close" data-close-dialog>×</button></div>
+      <input id="course-id" type="hidden">
+      <label>课程名称<input id="course-name" required maxlength="40" placeholder="例如：高等数学"></label>
+      <div class="form-grid two"><label>星期<select id="course-weekday"><option value="1">星期一</option><option value="2">星期二</option><option value="3">星期三</option><option value="4">星期四</option><option value="5">星期五</option><option value="6">星期六</option><option value="7">星期日</option></select></label><label>课程颜色<select id="course-color"><option value="#59598f">鸢尾紫</option><option value="#438466">青翠绿</option><option value="#d08378">珊瑚红</option><option value="#c89436">暖金色</option><option value="#4778a8">湖水蓝</option></select></label></div>
+      <div class="form-grid two"><label>开始时间<input id="course-start" type="time" required value="08:00"></label><label>结束时间<input id="course-end" type="time" required value="09:40"></label></div>
+      <div class="form-grid two"><label>教室 / 地点<input id="course-location" maxlength="40" placeholder="例如：教学楼 A203"></label><label>老师<input id="course-teacher" maxlength="30" placeholder="选填"></label></div>
+      <div class="dialog-actions"><button type="button" class="button danger hidden" id="delete-course">删除课程</button><span></span><button type="button" class="button ghost" data-close-dialog>取消</button><button class="button primary" value="save">保存课程</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="character-dialog" class="character-dialog">
+    <form id="character-form" method="dialog">
+      <div class="dialog-head"><div><p class="section-label">CHARACTER PROFILE</p><h2 id="character-dialog-title">添加角色</h2></div><button type="button" class="dialog-close" data-close-character>×</button></div>
+      <input id="character-id" type="hidden">
+      <div class="form-grid two"><label>角色名字<input id="character-name" required maxlength="30" placeholder="例如：莉娅"></label><label>身份 / 称呼<input id="character-identity" maxlength="40" placeholder="例如：安静的学习搭档"></label></div>
+      <label>性格设定<textarea id="character-personality" maxlength="300" placeholder="例如：温柔但不纵容拖延，说话简短，会先听完再给建议。"></textarea></label>
+      <div class="form-grid two"><label>常用语<input id="character-catchphrase" maxlength="80" placeholder="例如：我们先完成最小的一步。"></label><label>角色识别色<input id="character-accent" type="color" value="#59598f"></label></div>
+      <label>独立记忆摘要<textarea id="character-memory" maxlength="500" placeholder="这里保存只属于该角色的背景与相处记忆，之后接入 API 时会作为角色上下文。"></textarea></label>
+      <div class="dialog-actions"><button type="button" class="button danger hidden" id="delete-character">删除角色</button><span></span><button type="button" class="button ghost" data-close-character>取消</button><button class="button primary" value="save">保存角色</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="exam-resource-dialog" class="exam-dialog">
+    <form id="exam-resource-form" method="dialog">
+      <div class="dialog-head"><div><p class="section-label">ESSAY MATERIAL</p><h2 id="exam-resource-dialog-title">保存申论素材</h2></div><button type="button" class="dialog-close" data-close-exam-resource>×</button></div>
+      <input id="exam-resource-id" type="hidden">
+      <div class="form-grid two"><label>内容类型<select id="exam-resource-type"><option value="article">完整文章</option><option value="excerpt">优秀片段</option><option value="idea">写作思路</option></select></label><label>标题<input id="exam-resource-title" required maxlength="100" placeholder="例如：基层治理案例片段"></label></div>
+      <label>正文<textarea id="exam-resource-body" required placeholder="粘贴文章、片段、金句、案例或自己的写作思路……"></textarea></label>
+      <div class="form-grid two"><label>来源 / 链接<input id="exam-resource-source" maxlength="300" placeholder="书名、公众号、网页链接等"></label><label>适用主题<input id="exam-resource-topic" maxlength="100" placeholder="基层治理、生态文明……"></label></div>
+      <label>标签<input id="exam-resource-tags" maxlength="200" placeholder="多个标签用逗号分隔"></label>
+      <label>个人批注<textarea id="exam-resource-note" placeholder="为什么保存、以后可以怎么使用……"></textarea></label>
+      <div class="dialog-actions"><button type="button" class="button danger hidden" id="delete-exam-resource">删除资料</button><span></span><button type="button" class="button ghost" data-close-exam-resource>取消</button><button class="button primary" value="save">保存资料</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="exam-question-dialog" class="exam-dialog question-editor-dialog">
+    <form id="exam-question-form" method="dialog">
+      <div class="dialog-head"><div><p class="section-label">QUESTION FILE</p><h2 id="exam-question-dialog-title">整理题目</h2></div><button type="button" class="dialog-close" data-close-exam-question>×</button></div>
+      <input id="exam-question-id" type="hidden">
+      <div class="form-grid three"><label>题型<select id="exam-question-type"><option value="single">单选题</option><option value="multiple">多选题</option><option value="judge">判断题</option><option value="blank">填空题</option><option value="material">材料题</option><option value="subjective">主观题</option><option value="essay">申论题</option></select></label><label>分类<input id="exam-question-category-input" list="exam-category-options" placeholder="行测/判断推理"></label><label>状态<select id="exam-question-status"><option value="draft">待整理</option><option value="ready">可以练习</option></select></label></div>
+      <datalist id="exam-category-options"></datalist>
+      <label>题干<textarea id="exam-question-stem" required placeholder="输入或校对识别后的题干……"></textarea></label>
+      <label>选项<textarea id="exam-question-options" placeholder="每行一个选项；主观题可以留空"></textarea></label>
+      <div class="form-grid two"><label>正确答案<input id="exam-question-answer" maxlength="500" placeholder="例如：B"></label><label>题源名称<input id="exam-question-source" maxlength="120" placeholder="例如：2025国考行政执法卷"></label></div>
+      <div class="form-grid four"><label>年份<input id="exam-question-year" type="number" min="1990" max="2100" placeholder="2025"></label><label>考试类型<input id="exam-question-kind" maxlength="40" placeholder="国考 / 省考"></label><label>地区<input id="exam-question-region" maxlength="40" placeholder="全国 / 江苏"></label><label>岗位或试卷类别<input id="exam-question-target" maxlength="100" placeholder="行政执法类"></label></div>
+      <label>标签<input id="exam-question-tags" maxlength="200" placeholder="多个标签用逗号分隔，例如：高频,重点复刷"></label>
+      <label>解析 / 自己的理解<textarea id="exam-question-explanation" placeholder="记录解法、规律或申论思路……"></textarea></label>
+      <div class="form-grid two"><label>错误原因<select id="exam-question-reason"><option value="">尚未填写</option><option>知识点不会</option><option>方法不会</option><option>审题错误</option><option>计算错误</option><option>时间不足</option><option>蒙题</option><option>记忆模糊</option></select></label><label class="dialog-check"><span>加入错题本</span><input id="exam-question-mistake" type="checkbox"></label></div>
+      <div class="dialog-actions"><button type="button" class="button danger hidden" id="delete-exam-question">删除题目</button><span></span><button type="button" class="button ghost" data-close-exam-question>取消</button><button class="button primary" value="save">保存题目</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="english-article-dialog" class="exam-dialog english-dialog">
+    <form id="english-article-form" method="dialog">
+      <div class="dialog-head"><div><p class="section-label">READING ARCHIVE</p><h2 id="english-article-dialog-title">收藏文章</h2></div><button type="button" class="dialog-close" data-close-english-article>×</button></div>
+      <input id="english-article-id" type="hidden">
+      <div class="form-grid two"><label>文章标题<input id="english-article-title" required maxlength="160" placeholder="例如：Why We Remember What We Read"></label><label>来源名称<input id="english-article-source" maxlength="100" placeholder="网站、作者或书名"></label></div>
+      <label>文章网址<input id="english-article-url" type="url" maxlength="1000" placeholder="https://…（可以只保存网址）"></label>
+      <label>文章全文或片段<textarea id="english-article-body" placeholder="粘贴英文正文；如果只想收藏地址，可以留空。"></textarea></label>
+      <div class="form-grid two"><label>标签<input id="english-article-tags" maxlength="200" placeholder="学术英语,心理学,B2"></label><label>难度<select id="english-article-level"><option value="">未标记</option><option>A1</option><option>A2</option><option>B1</option><option>B2</option><option>C1</option><option>C2</option><option value="Academic">学术阅读</option></select></label></div>
+      <label>为什么收藏 / 阅读备注<textarea id="english-article-note" maxlength="800" placeholder="例如：论证结构清楚，想学习作者如何引出反方观点。"></textarea></label>
+      <div class="dialog-actions"><span></span><span></span><button type="button" class="button ghost" data-close-english-article>取消</button><button class="button primary" value="save">保存文章</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="english-sentence-dialog" class="exam-dialog english-dialog">
+    <form id="english-sentence-form" method="dialog">
+      <div class="dialog-head"><div><p class="section-label">SENTENCE CARD</p><h2 id="english-sentence-dialog-title">收藏句子</h2></div><button type="button" class="dialog-close" data-close-english-sentence>×</button></div>
+      <input id="english-sentence-id" type="hidden"><input id="english-sentence-article-id" type="hidden">
+      <label>英文句子<textarea id="english-sentence-text" required placeholder="粘贴想反复学习的英文句子……"></textarea></label>
+      <div class="form-grid two"><label>中文理解<input id="english-sentence-translation" maxlength="500" placeholder="可以稍后补充"></label><label>来源<input id="english-sentence-source" maxlength="200" placeholder="文章标题、书名或网址"></label></div>
+      <label>标签<input id="english-sentence-tags" maxlength="200" placeholder="长难句,虚拟语气,写作表达"></label>
+      <label>为什么收藏 / 使用备注<textarea id="english-sentence-note" maxlength="800" placeholder="它哪里有用？准备在什么场景中使用？"></textarea></label>
+      <div class="dialog-actions"><button type="button" class="button danger hidden" id="delete-english-sentence">删除句子</button><span></span><button type="button" class="button ghost" data-close-english-sentence>取消</button><button class="button primary" value="save">保存句子</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="english-word-dialog" class="word-collector-dialog">
+    <form id="english-word-form" method="dialog">
+      <div class="word-dialog-top"><div><p class="section-label">WORD NOTE</p><h2 id="english-word-title">word</h2></div><button type="button" class="word-dialog-audio" id="english-word-speak" title="朗读">▶</button><button type="button" class="dialog-close" data-close-english-word>×</button></div>
+      <input id="english-word-value" type="hidden"><input id="english-word-article-id" type="hidden">
+      <label id="manual-word-field" class="hidden">单词或短语<input id="english-word-manual" maxlength="100" placeholder="输入要记忆的英文词汇"></label>
+      <blockquote id="english-word-context"></blockquote>
+      <label>释义<input id="english-word-meaning" maxlength="500" placeholder="可以先留空，之后补充"></label>
+      <div class="form-grid three"><label>标签<input id="english-word-tags" maxlength="160" placeholder="学术,写作表达"></label><label>为什么收藏<input id="english-word-reason" maxlength="300" placeholder="容易混淆 / 想用于写作"></label><label>加入词库<select id="english-word-library"></select></label></div>
+      <p class="dictionary-note">释义与用法可在 AI 学习包中要求优先依据牛津学习者词典核实；无法核实时不得编造。</p>
+      <div class="dialog-actions"><span></span><span></span><button type="button" class="button ghost" data-close-english-word>取消</button><button class="button primary" id="save-english-word" value="save">加入词库</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="word-list-dialog" class="word-list-dialog">
+    <form id="word-list-form" method="dialog">
+      <div class="dialog-head"><div><p class="section-label">NEW LIBRARY / 新词库</p><h2>给这个词库取个名字</h2></div><button type="button" class="dialog-close" data-close-word-list>×</button></div>
+      <p class="word-list-dialog-copy">新词库会真实保存在本机。之后导入单词、书籍候选词和复习记录都可以按词库分开。</p>
+      <label>词库名称<input id="word-list-name" maxlength="30" required autocomplete="off" placeholder="例如：雅思阅读、学术写作、九月新词"></label>
+      <div class="word-list-name-preview"><span>LIBRARY</span><strong id="word-list-name-preview">未命名词库</strong><small>创建后会自动切换到这个词库</small></div>
+      <div class="dialog-actions"><span></span><span></span><button type="button" class="button ghost" data-close-word-list>取消</button><button class="button primary" value="save">创建词库</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="learning-import-dialog" class="learning-import-dialog">
+    <div class="learning-import-shell">
+      <div class="dialog-head"><div><p class="section-label">UNIFIED INBOX / 统一资料入口</p><h2>导入、识别，再决定放到哪里</h2><p>本地文件和图片只在电脑中处理；网页正文仅在你点击解析时联网读取。</p></div><button type="button" class="dialog-close" data-close-learning-import>×</button></div>
+      <div class="import-route-bar">
+        <label>归档到<select id="learning-import-destination"><option value="englishArticle">英语 · 文章 / 阅读题</option><option value="englishWords">英语 · 自定义词库</option><option value="englishSentences">英语 · 句子卡片</option><option value="examResource">考公 · 资料库</option><option value="examQuestion">考公 · 材料题组 / 题库</option><option value="examMistake">考公 · 错题题组</option></select></label>
+        <label id="learning-word-list-field">目标词库<select id="learning-import-word-list"></select></label>
+      </div>
+      <div class="import-source-grid">
+        <section class="import-source-card">
+          <p class="section-label">LOCAL FILE / 本地文件</p><div class="learning-dialog-dropzone" id="learning-dialog-dropzone" tabindex="0"><span>⇣</span><strong>从微信或资源管理器拖入文件</strong><small>微信文件点开下载一次即可直接拖入<br>DOCX · PDF · TXT · MD · CSV · TSV · PNG · JPG · WEBP · BMP</small><button class="button primary" id="learning-dialog-choose" type="button">选择文件</button></div>
+        </section>
+        <section class="import-source-card">
+          <p class="section-label">WEB ARTICLE / 网页文章</p><label>网页地址<input id="learning-web-url" type="url" placeholder="https://…"></label><button class="button ghost" id="learning-fetch-web" type="button">联网解析正文</button><small id="learning-web-status">公开网页会自动提取标题与正文；失败时仍可只保存网址。</small>
+        </section>
+        <section class="import-source-card">
+          <p class="section-label">PASTE / 粘贴</p><textarea id="learning-paste-text" placeholder="粘贴文章、单词表、句子或题目；也可以直接按 Ctrl+V 粘贴截图。"></textarea><button class="button ghost" id="learning-add-paste" type="button">加入待整理箱</button>
+        </section>
+      </div>
+      <div class="import-queue-layout">
+        <aside><div class="import-queue-head"><div><p class="section-label">INBOX</p><h3>待整理箱</h3></div><button class="text-button" id="clear-learning-queue" type="button">清空</button></div><div id="learning-import-list" class="learning-import-list"></div></aside>
+        <section class="import-item-editor" id="learning-import-editor">
+          <div class="import-editor-empty"><span>⇢</span><strong>选择一项材料进行校对</strong><small>图片需要先裁剪识别，文档正文可以直接修改。</small></div>
+          <div class="import-editor-fields" hidden>
+            <div class="form-grid two"><label>标题<input id="learning-item-title" maxlength="180"></label><label>来源<input id="learning-item-source" maxlength="300"></label></div>
+            <div class="form-grid two"><label>标签<input id="learning-item-tags" maxlength="200" placeholder="多个标签用逗号分隔"></label><label>收藏原因<input id="learning-item-note" maxlength="400" placeholder="为什么保存这份材料"></label></div>
+            <label>识别或提取的正文<textarea id="learning-item-text" placeholder="文档正文、OCR 结果或粘贴内容会显示在这里，可以校对修改。"></textarea></label>
+            <section class="structure-review-panel" id="structure-review-panel">
+              <div class="structure-review-head"><div><p class="section-label">STRUCTURE REVIEW / 结构校对</p><h3>识别公共材料与子题</h3><small>离线识别题号、选项和答案；所有结果都可以修改。</small></div><button class="button secondary" id="learning-analyze-structure" type="button">重新识别结构</button></div>
+              <div class="structure-review-empty" id="structure-review-empty"><span>⌁</span><p>导入长材料后，会在这里显示建议题型、公共材料和子题。</p></div>
+              <div class="structure-review-result" id="structure-review-result" hidden>
+                <div class="detection-ribbon"><span id="structure-type-badge">待识别</span><strong id="structure-confidence">0%</strong><small id="structure-warning">请校对后归档</small></div>
+                <div class="form-grid two"><label>题组名称<input id="structure-group-title" maxlength="180"></label><label>材料类型<select id="structure-material-type"><option value="exam_data_analysis">行测 · 资料分析</option><option value="exam_verbal">行测 · 言语理解</option><option value="exam_reasoning">行测 · 判断推理</option><option value="exam_quantitative">行测 · 数量关系</option><option value="exam_knowledge">行测 · 常识判断</option><option value="exam_essay">申论材料题</option><option value="exam_question_group">考公材料题组</option><option value="english_reading">英语阅读理解</option><option value="english_cloze">英语完形填空</option><option value="english_translation">英语翻译</option><option value="english_writing">英语写作</option><option value="english_article">普通英文文章</option></select></label></div>
+                <label class="structure-passage-field">公共材料<textarea id="structure-passage" placeholder="多道子题共同引用的文章、数据、表格说明或题目背景。"></textarea></label>
+                <div class="structure-question-head"><div><strong>识别出的子题</strong><small id="structure-question-count">0 道</small></div><button class="text-button" id="structure-add-question" type="button">＋ 添加子题</button></div>
+                <div class="structure-question-list" id="structure-question-list"></div>
+              </div>
+            </section>
+            <div class="import-editor-actions"><span id="learning-item-status"></span><button class="button ghost" id="learning-open-file" type="button">打开原文件</button><button class="button secondary" id="learning-run-ocr" type="button">裁剪并识别图片</button><button class="button danger" id="learning-remove-item" type="button">移除此项</button></div>
+          </div>
+        </section>
+      </div>
+      <div class="dialog-actions import-final-actions"><span id="learning-import-summary">还没有待整理材料</span><span></span><button type="button" class="button ghost" data-close-learning-import>取消</button><button class="button primary" id="archive-learning-import" type="button">归档全部</button></div>
+    </div>
+  </dialog>
+
+  <dialog id="ocr-crop-dialog" class="ocr-crop-dialog">
+    <div class="ocr-dialog-shell">
+      <div class="dialog-head"><div><p class="section-label">LOCAL OCR / 本地图片识别</p><h2>先裁剪，再校对文字</h2><p>拖动鼠标框选需要识别的区域；自动裁剪不准确时可以重新框选。</p></div><button type="button" class="dialog-close" data-close-ocr>×</button></div>
+      <div class="ocr-workspace">
+        <section class="ocr-image-stage"><canvas id="ocr-crop-canvas"></canvas><div class="ocr-toolbar"><button class="button ghost" id="ocr-full-image" type="button">整张图片</button><button class="button ghost" id="ocr-auto-crop" type="button">自动裁剪</button><button class="button primary" id="ocr-recognize" type="button">识别选区</button></div><p id="ocr-progress-label">等待选择识别区域</p><div class="ocr-progress-track"><i id="ocr-progress-bar"></i></div></section>
+        <section class="ocr-result-panel"><div><p class="section-label">RECOGNIZED TEXT</p><h3>识别结果 <span id="ocr-confidence"></span></h3></div><textarea id="ocr-result-text" placeholder="识别后的中英文会出现在这里，请对照左侧图片校对。"></textarea><p>公式、复杂表格和手写内容可能不准确；原图会与校对后的文字一起保存。</p></section>
+      </div>
+      <div class="dialog-actions"><span></span><span></span><button type="button" class="button ghost" data-close-ocr>取消</button><button class="button primary" id="use-ocr-result" type="button">使用校对后的文字</button></div>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" hidden></div>
+  <script src="vocabulary.js"></script>
+  <script src="final-exam-core.js"></script>
+  <script src="material-parser.js"></script>
+  <script src="panel.js"></script>
+  <script src="system-speech.js"></script>
+  <script src="ai-workspace.js"></script>
+  <script src="word-selection.js"></script>
+  <script src="word-adventure.js"></script>
+</body>
+</html>

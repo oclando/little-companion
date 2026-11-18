@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "engine": "auto",
+  "displayName": "角色名称",
+  "preview": "static/character.png",
+  "entry": {
+    "static": "static/character.png",
+    "live2d": "live2d/model.model3.json",
+    "spine": "spine/model.json",
+    "spineAtlas": "spine/model.atlas",
+    "spineVersion": "4.2"
+  },
+  "layout": {
+    "scale": 1,
+    "anchorX": 0.5,
+    "anchorY": 1
+  },
+  "motions": {
+    "idle": "idle",
+    "tap": "tap",
+    "happy": "happy",
+    "sad": "sad",
+    "focus": "focus",
+    "remind": "remind",
+    "drag": "drag",
+    "sleep": "sleep"
+  }
+}

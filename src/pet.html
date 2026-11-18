@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><link rel="stylesheet" href="pet.css"><title>小伙伴桌宠</title></head>
+<body>
+  <main id="pet" aria-label="小伙伴桌宠">
+    <div id="bubble" class="bubble" hidden><span id="bubble-text"></span><button id="dismiss" aria-label="关闭提醒">×</button></div>
+    <div id="character" class="character" title="单击打开助手，拖动可移动，滚轮调整大小，右键显示菜单"></div>
+    <div class="pet-status" id="pet-status" hidden><span id="pet-time">25:00</span><span>专注中</span></div>
+    <div class="controls" aria-label="桌宠操作">
+      <button id="open-panel" title="打开学习助手" aria-label="打开学习助手">⌂</button>
+      <button id="open-ai-chat" title="与角色聊天或冒险" aria-label="与角色聊天或冒险">聊</button>
+      <button id="cycle-character" title="切换下一位角色" aria-label="切换下一位角色">⇄</button>
+      <button id="toggle-stage" title="单人 / 多人同台" aria-label="切换单人或多人同台">众</button>
+      <button id="open-codex" title="打开 Codex" aria-label="打开 Codex">C</button>
+      <button id="hide-pet" title="隐藏桌宠（可从托盘恢复）" aria-label="隐藏桌宠">—</button>
+      <button id="close-app" title="完全退出" aria-label="完全退出">×</button>
+    </div>
+  </main>
+  <script src="vendor/spine-webgl-3.8.js"></script>
+  <script src="pet-spine.js"></script>
+  <script src="pet.js"></script>
+</body>
+</html>

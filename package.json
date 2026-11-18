@@ -1,0 +1,71 @@
+{
+  "name": "little-companion",
+  "version": "2.5.0",
+  "author": "Local Study Companion",
+  "description": "Desktop companion with reminders, character chat and vocabulary adventures",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "package": "electron-builder --win nsis",
+    "test": "node tests/vocabulary.test.js && node tests/material-parser.test.js && node tests/translation-provider.test.js && node tests/final-exam-core.test.js && node --test tests/ai-core.test.js tests/word-adventure.test.js tests/system-speech.test.js",
+    "postinstall": "node scripts/prepare-ocr.js"
+  },
+  "devDependencies": {
+    "electron": "^37.2.6",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "com.local.littlecompanion",
+    "productName": "小伙伴桌宠",
+    "electronDist": "node_modules/electron/dist",
+    "icon": "assets/app-icon.png",
+    "artifactName": "小伙伴桌宠-安装程序.${ext}",
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "asarUnpack": [
+      "node_modules/tesseract.js/**/*",
+      "node_modules/tesseract.js-core/**/*",
+      "assets/ocr/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "assets/app-icon.png",
+        "to": "app-icon.png"
+      },
+      {
+        "from": "assets",
+        "to": "default-assets",
+        "filter": [
+          "character.png",
+          "character.gif",
+          "frames/**/*"
+        ]
+      }
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "小伙伴桌宠",
+      "uninstallDisplayName": "小伙伴桌宠 · 学习助手"
+    }
+  },
+  "dependencies": {
+    "@mozilla/readability": "^0.6.0",
+    "@tesseract.js-data/chi_sim": "^1.0.0",
+    "@tesseract.js-data/eng": "^1.0.0",
+    "@xmldom/xmldom": "^0.8.15",
+    "jsdom": "^30.0.1",
+    "jszip": "^3.10.1",
+    "mammoth": "^1.12.1",
+    "pdfjs-dist": "^6.2.108",
+    "tesseract.js": "^7.0.0"
+  }
+}
